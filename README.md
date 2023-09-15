@@ -47,6 +47,10 @@
           JSON Web Token
   </a>
 
+## 🎥 Video
+
+[![IDCBPF Preview](https://img.youtube.com/vi/Zq7PwGxcsLg/maxresdefault.jpg)](https://youtu.be/Zq7PwGxcsLg)
+
 ## 📝 License
 
 Copyright © 2023 [Centro Brasileiro de Pesquisas Físicas](https://cbpf.br)\

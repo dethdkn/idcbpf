@@ -3,14 +3,14 @@ export default (): Promise<number> => {
 		const uids: number[] = []
 		ldapClient.search(
 			LDAP_PEOPLE_DN,
-			{filter: '(uid=*)', scope: 'sub', attributes: ['uidNumber']},
+			{ filter: '(uid=*)', scope: 'sub', attributes: ['uidNumber'] },
 			(err, res) => {
 				if (err) {
 					new Erro({
 						erro: {
 							info: 'Erro na busca de ids dos idscbpf ldap',
-							err
-						}
+							err,
+						},
 					}).save()
 					return reject('Erro ao baixar ids dos usuários')
 				}
@@ -22,15 +22,15 @@ export default (): Promise<number> => {
 					new Erro({
 						erro: {
 							info: 'Erro na busca de ids dos idscbpf ldap',
-							error
-						}
+							error,
+						},
 					}).save()
 					return reject('Erro ao baixar ids dos usuários')
 				})
 				res.on('end', () => {
 					return resolve(Math.max(...uids) + 1)
 				})
-			}
+			},
 		)
 	})
 }

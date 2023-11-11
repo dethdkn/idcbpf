@@ -1,9 +1,9 @@
 <script setup lang="ts">
 definePageMeta({
-	middleware: 'is-authenticated'
+	middleware: 'is-authenticated',
 })
 useHead({
-	title: `ID - Logs`
+	title: `Logs`,
 })
 </script>
 

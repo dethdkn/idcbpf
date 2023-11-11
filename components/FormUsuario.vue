@@ -1,29 +1,30 @@
 <script setup lang="ts">
-const {data: coordenacoes, error: error1} = await useFetch('/api/fetch/coordenacoes')
+const { data: coordenacoes, error: error1 } = await useFetch('/api/fetch/coordenacoes')
 if (error1.value) {
 	const err = (error1.value as any).data
 	if (err) {
-		const {statusCode, statusMessage, message} = err
-		throw createError({statusCode, statusMessage, message})
+		const { statusCode, statusMessage, message } = err
+		throw createError({ statusCode, statusMessage, message })
 	}
 }
-const {data: grupos, error: error2} = await useFetch('/api/fetch/grupos')
+const { data: grupos, error: error2 } = await useFetch('/api/fetch/grupos')
 if (error2.value) {
 	const err = (error2.value as any).data
 	if (err) {
-		const {statusCode, statusMessage, message} = err
-		throw createError({statusCode, statusMessage, message})
+		const { statusCode, statusMessage, message } = err
+		throw createError({ statusCode, statusMessage, message })
 	}
 }
 
-const {level} = storeToRefs(userStore())
+const { level } = storeToRefs(userStore())
 
 const modalFoto = ref(false)
-const abrirModalFoto = () => {
-	if (level.value === 'Administrador') modalFoto.value = true
+function abrirModalFoto() {
+	if (level.value === 'Administrador')
+		modalFoto.value = true
 }
 
-const {open, reset, onChange} = useFileDialog({accept: 'image/*'})
+const { open, reset, onChange } = useFileDialog({ accept: 'image/*' })
 onChange(async (file) => {
 	if (file) {
 		foto.value = await useFileToB64(file[0])
@@ -35,18 +36,17 @@ onChange(async (file) => {
 const loadingWebcam = ref(false)
 const webcamDiv = ref<HTMLVideoElement | null>(null)
 const webcamStream = ref<MediaStream | null>(null)
-const iniciarCamera = () => {
+function iniciarCamera() {
 	loadingWebcam.value = true
 	if (process.client) {
 		if (navigator.mediaDevices.getUserMedia) {
 			navigator.mediaDevices
-				.getUserMedia({audio: false, video: {facingMode: 'user'}})
+				.getUserMedia({ audio: false, video: { facingMode: 'user' } })
 				.then((stream) => {
 					loadingWebcam.value = false
 					webcamStream.value = stream
-					if (webcamDiv.value) {
+					if (webcamDiv.value)
 						webcamDiv.value.srcObject = stream
-					}
 				})
 				.catch(() => {})
 		}
@@ -54,7 +54,7 @@ const iniciarCamera = () => {
 }
 const fotoTirada = ref(false)
 const imgFotoTirada = ref<HTMLImageElement | null>(null)
-const recFoto = () => {
+function recFoto() {
 	if (webcamDiv.value) {
 		const img = useHTMLVideoToImgSrc(webcamDiv.value)
 		if (img && imgFotoTirada.value) {
@@ -63,7 +63,7 @@ const recFoto = () => {
 		}
 	}
 }
-const escolherFotoTirada = async () => {
+async function escolherFotoTirada() {
 	if (imgFotoTirada.value && imgFotoTirada.value.src) {
 		foto.value = await useImageSrcToB64(imgFotoTirada.value.src)
 		fotoTirada.value = false
@@ -71,11 +71,12 @@ const escolherFotoTirada = async () => {
 	}
 }
 watch(modalFoto, (nv) => {
-	if (!nv)
+	if (!nv) {
 		if (webcamStream.value) {
-			webcamStream.value.getTracks().forEach((track) => track.stop())
+			webcamStream.value.getTracks().forEach(track => track.stop())
 			webcamStream.value = null
 		}
+	}
 })
 
 const foto = ref('')
@@ -100,17 +101,17 @@ const gruposSelecionados = ref([
 	'membros - positron',
 	'membros - rdp',
 	'membros - sendmail',
-	'membros - validacao-digital'
+	'membros - validacao-digital',
 ])
 const loadingCriar = ref(false)
 
-const criar = () => {
+async function criar() {
 	loadingCriar.value = true
 	if (!uid.value) {
 		useToast().add({
 			title: 'Preencha o ID CBPF',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -118,7 +119,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha o Nome',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -126,7 +127,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha o Sobrenome',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -134,7 +135,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha o Telefone',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -142,7 +143,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha o Email Pessoal',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -150,7 +151,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha a Senha',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -158,7 +159,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha a Validação de Senha(repetir)',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -166,7 +167,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Preencha um Email Pessoal Válido',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -174,7 +175,7 @@ const criar = () => {
 		useToast().add({
 			title: 'Email do CBPF não pode ser cadastrado como Email Pessoal',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -183,7 +184,7 @@ const criar = () => {
 			title:
 				'Senha deve conter mínimo de 8 dígitos, 1 letra maiúsculas, 1 letra minúsculas, 1 número e 1 símbolo',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
@@ -191,13 +192,13 @@ const criar = () => {
 		useToast().add({
 			title: 'Senhas não coincidem',
 			icon: 'i-heroicons-exclamation-triangle',
-			color: 'red'
+			color: 'red',
 		})
 		return (loadingCriar.value = false)
 	}
-	fetch('/api/insert/usuario', {
+	const res = await $fetch('/api/insert/usuario', {
 		method: 'POST',
-		body: JSON.stringify({
+		body: {
 			foto: foto.value,
 			uid: uid.value,
 			nome: nome.value,
@@ -209,161 +210,176 @@ const criar = () => {
 			validade: validade.value,
 			descricao: descricao.value,
 			coordenacoes: coordenacoesSelecionadas.value,
-			grupos: gruposSelecionados.value
+			grupos: gruposSelecionados.value,
+		},
+	}).catch((err) => {
+		useToast().add({
+			title: err.data.message,
+			icon: 'i-heroicons-exclamation-triangle',
+			color: 'red',
 		})
+		loadingCriar.value = false
 	})
-		.then(async (res) => {
-			if (res.ok) {
-				useToast().add({
-					title: 'Usuário criado com sucesso!',
-					icon: 'i-heroicons-check-badge',
-					color: 'green'
-				})
-				loadingCriar.value = false
-				return navigateTo(`/usuarios/${uid.value}`)
-			}
-			const err: ErroReq = await res.json()
-			useToast().add({
-				title: err.message,
-				icon: 'i-heroicons-exclamation-triangle',
-				color: 'red'
-			})
-			loadingCriar.value = false
+	if (res) {
+		useToast().add({
+			title: 'Usuário criado com sucesso!',
+			icon: 'i-heroicons-check-badge',
+			color: 'green',
 		})
-		.catch(() => {
-			useToast().add({
-				title: 'Ocorreu um erro desconhecido',
-				icon: 'i-heroicons-exclamation-triangle',
-				color: 'red'
-			})
-			loadingCriar.value = false
-		})
+		loadingCriar.value = false
+		return navigateTo(`/usuarios/${uid.value}`)
+	}
 }
+
+const itemsGrupos = computed(() => {
+	const items: { grupo: string; subgrupo: string; descricao?: string; label: string }[] = []
+	if (grupos.value) {
+		for (const grupo of grupos.value) {
+			items.push({
+				grupo: grupo.grupo,
+				subgrupo: grupo.subgrupo,
+				descricao: grupo.description,
+				label: grupo.grupo,
+			})
+		}
+	}
+	const groupedItems = items.reduce<
+		{ grupo: string; subgrupo: { nome: string; descricao?: string }[]; label: string }[]
+	>((acc, obj) => {
+		const existingGroup = acc.find(item => item.grupo === obj.grupo)
+		if (existingGroup) {
+			existingGroup.subgrupo.push({ nome: obj.subgrupo, descricao: obj.descricao })
+		}
+		else {
+			acc.push({
+				grupo: obj.grupo,
+				subgrupo: [{ nome: obj.subgrupo, descricao: obj.descricao }],
+				label: obj.grupo,
+			})
+		}
+		return acc
+	},
+	[],
+	)
+	return groupedItems
+})
 </script>
 
 <template>
 	<UCard
 		class="w-full min-h-[calc(100vh-131px)]"
 		:ui="{
+			base: '',
+			ring: '',
 			divide: 'divide-y divide-gray-200 dark:divide-gray-700',
-			header: {padding: 'px-4 py-5'},
-			body: {base: 'divide-y divide-gray-200 dark:divide-gray-700'},
-			footer: {padding: 'p-4'}
+			header: { padding: 'px-4' },
+			rounded: '',
+			body: { padding: 'py-5' },
 		}"
 	>
 		<template #header>
-			<h2 class="text-center">{{ uid }}</h2>
+			<h2 class="text-center">
+				{{ uid }}
+			</h2>
 			<div class="flex justify-center mt-2">
 				<div
-					class="flex relative cursor-pointer"
-					:class="{'cursor-pointer': level === 'Administrador', group: level === 'Administrador'}"
+					class="relative flex cursor-pointer"
+					:class="{ 'cursor-pointer': level === 'Administrador', 'group': level === 'Administrador' }"
 					@click="abrirModalFoto"
 				>
 					<img
 						v-if="foto.length > 0"
 						class="w-24 h-24 rounded-full"
-						:src="'data:image/jpeg;base64,' + foto"
+						:src="`data:image/jpeg;base64,${foto}`"
 						alt="Usuário sem foto"
-					/>
+					>
 					<img
 						v-else
 						class="w-24 h-24 rounded-full"
 						src="~/assets/images/nopic.jpg"
 						alt="Usuário sem foto"
-					/>
-					<div
-						class="w-24 h-24 bg-slate-950 opacity-70 rounded-full absolute invisible group-hover:visible flex justify-center items-center"
 					>
-						<UIcon name="i-heroicons-camera" class="text-white text-xl" />
+					<div
+						class="absolute flex items-center justify-center invisible w-24 h-24 rounded-full bg-slate-950 opacity-70 group-hover:visible"
+					>
+						<UIcon name="i-heroicons-camera" class="text-xl text-white" />
 					</div>
 				</div>
 			</div>
 		</template>
-		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 place-items-center">
 			<div class="w-full">
-				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="uid-form"
-					>ID CBPF</label
-				>
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="uid-form">ID CBPF</label>
 				<UInput
 					id="uid-form"
-					icon="i-heroicons-user"
 					v-model="uid"
+					icon="i-heroicons-user"
 					:disabled="level === 'Auditor'"
 					@keydown.space.prevent
 					@keyup="uid = uid.toLocaleLowerCase()"
 				/>
 			</div>
 			<div class="w-full">
-				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="nome-form"
-					>Nome</label
-				>
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="nome-form">Nome</label>
 				<UInput
 					id="nome-form"
-					icon="i-heroicons-identification"
 					v-model="nome"
-					@keydown.space.prevent
+					icon="i-heroicons-identification"
 					:disabled="level === 'Auditor'"
+					@keydown.space.prevent
 				/>
 			</div>
 			<div class="w-full">
 				<label
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 					for="sobrenome-form"
-					>Sobrenome</label
-				>
+				>Sobrenome</label>
 				<UInput
 					id="sobrenome-form"
-					icon="i-heroicons-credit-card"
 					v-model="sobrenome"
+					icon="i-heroicons-credit-card"
 					:disabled="level === 'Auditor'"
 				/>
 			</div>
 			<div class="w-full">
-				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="ramal-form"
-					>Ramal</label
-				>
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="ramal-form">Ramal</label>
 				<UInput
 					id="ramal-form"
-					icon="i-heroicons-phone"
 					v-model="ramal"
-					@keydown="useIsNumber"
+					icon="i-heroicons-phone"
 					:disabled="level === 'Auditor'"
+					@keydown="useIsNumber"
 				/>
 			</div>
 			<div class="w-full">
 				<label
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 					for="telefone-form"
-					>Telefone</label
-				>
+				>Telefone</label>
 				<UInput
 					id="telefone-form"
-					icon="i-heroicons-device-phone-mobile"
 					v-model="telefone"
-					@keydown="useIsNumber"
+					icon="i-heroicons-device-phone-mobile"
 					:disabled="level === 'Auditor'"
+					@keydown="useIsNumber"
 				/>
 			</div>
 			<div class="w-full">
-				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="email-form"
-					>Email Pessoal</label
-				>
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="email-form">Email Pessoal</label>
 				<UInput
 					id="email-form"
-					icon="i-heroicons-envelope"
 					v-model="email"
+					icon="i-heroicons-envelope"
 					:disabled="level === 'Auditor'"
 				/>
 			</div>
 			<div class="w-full">
-				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="senha-form"
-					>Senha</label
-				>
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="senha-form">Senha</label>
 				<UInput
 					id="senha-form"
+					v-model="senha"
 					icon="i-heroicons-key"
 					type="password"
-					v-model="senha"
 					:disabled="level === 'Auditor'"
 				/>
 			</div>
@@ -371,13 +387,12 @@ const criar = () => {
 				<label
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 					for="repetir-senha-form"
-					>Repetir Senha</label
-				>
+				>Repetir Senha</label>
 				<UInput
 					id="repetir-senha-form"
+					v-model="repetirSenha"
 					icon="i-heroicons-shield-exclamation"
 					type="password"
-					v-model="repetirSenha"
 					:disabled="level === 'Auditor'"
 				/>
 			</div>
@@ -385,16 +400,14 @@ const criar = () => {
 				<label
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 					for="validade-form"
-					>Validade</label
-				>
+				>Validade</label>
 				<VDatePicker id="validade-form" v-model="validade" :disabled="level === 'Auditor'" />
 			</div>
 			<div class="w-full col-span-1 sm:col-span-2 md:col-span-3">
 				<label
-					class="block mb-2 ms-1 text-sm font-medium text-gray-900 dark:text-white"
+					class="block mb-2 text-sm font-medium text-gray-900 ms-1 dark:text-white"
 					for="descricao-form"
-					>Descrição</label
-				>
+				>Descrição</label>
 				<UTextarea
 					id="descricao-form"
 					v-model="descricao"
@@ -402,70 +415,120 @@ const criar = () => {
 					:disabled="level === 'Auditor'"
 				/>
 			</div>
-			<div class="w-full col-span-1 sm:col-span-2 md:col-span-3 border border-gray-700 p-5">
-				<h4 class="text-center mb-4">Coordenações</h4>
-				<div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-4 place-items-center">
+			<div class="w-full col-span-1 p-5 border border-gray-700 sm:col-span-2 md:col-span-3">
+				<h4 class="mb-4 text-center">
+					Coordenações
+				</h4>
+				<div v-if="coordenacoes" class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-6 place-items-center">
 					<div
-						v-if="coordenacoes"
 						v-for="coordenacao in coordenacoes"
 						:key="coordenacao.cn"
 						class="w-full text-center sm:text-start sm:ms-24"
 					>
-						<UTooltip :text="coordenacao.description" :popper="{placement: 'top'}">
+						<UTooltip :text="coordenacao.description" :popper="{ placement: 'top' }">
 							<UCheckbox
+								v-model="coordenacoesSelecionadas"
 								:label="coordenacao.cn"
 								:value="coordenacao.cn"
-								v-model="coordenacoesSelecionadas"
 								:disabled="level === 'Auditor'"
 							/>
 						</UTooltip>
 					</div>
 				</div>
 			</div>
-			<div class="w-full col-span-1 sm:col-span-2 md:col-span-3 border border-gray-700 p-5">
-				<h4 class="text-center mb-4">Grupos</h4>
-				<div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-4 place-items-center">
-					<div
-						v-if="grupos"
-						v-for="grupo in grupos"
-						:key="`${grupo.subgrupo} - ${grupo.grupo}`"
-						class="w-full text-center sm:text-start sm:ms-24"
-					>
-						<UTooltip :text="grupo.description" :popper="{placement: 'top'}">
-							<UCheckbox
-								:label="`${grupo.subgrupo} - ${grupo.grupo}`"
-								:value="`${grupo.subgrupo} - ${grupo.grupo}`"
-								v-model="gruposSelecionados"
-								:disabled="level === 'Auditor'"
-							/>
-						</UTooltip>
+			<div
+				class="w-full col-span-1 p-5 border border-gray-700 sm:col-span-2 md:col-span-3"
+			>
+				<h4 class="mb-4 text-center">
+					Grupos
+				</h4>
+				<ClientOnly>
+					<template #fallback>
+						<div class="flex items-center justify-center">
+							<UButton loading label="Carregando" />
+						</div>
+					</template>
+					<div class="grid grid-cols-3 gap-4 place-items-center">
+						<UAccordion
+							v-for="grupo in itemsGrupos"
+							:key="`${grupo.subgrupo} - ${grupo.grupo}`"
+							:ui="{ wrapper: 'flex flex-col w-full' }"
+							:items="[grupo]"
+						>
+							<template #default="{ item, open: isOpen }">
+								<UButton
+									color="gray"
+									variant="ghost"
+									class="border-b border-gray-200 dark:border-gray-700"
+									:ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }"
+								>
+									<template #leading>
+										<div
+											class="flex items-center justify-center w-6 h-6 -my-1 rounded-full bg-primary-500 dark:bg-primary-400"
+										>
+											<UIcon
+												name="i-heroicons-user-group"
+												class="w-4 h-4 text-white dark:text-gray-900"
+											/>
+										</div>
+									</template>
+									<span class="truncate">{{ item.label }}</span>
+									<template #trailing>
+										<UIcon
+											name="i-heroicons-chevron-right-20-solid"
+											class="w-5 h-5 transition-transform duration-200 transform ms-auto"
+											:class="[isOpen && 'rotate-90']"
+										/>
+									</template>
+								</UButton>
+							</template>
+							<template #item="{ item }">
+								<div class="italic text-center text-gray-900 dark:text-white">
+									<div v-for="sub in item.subgrupo" :key="sub" class="flex items-start justify-start space-y-3">
+										<UTooltip
+											:key="`${sub.nome} - ${item.grupo}`"
+											:text="sub.descricao"
+											:popper="{ placement: 'top' }"
+										>
+											<UCheckbox
+												v-model="gruposSelecionados"
+												:label="`${sub.nome} - ${item.grupo}`"
+												:value="`${sub.nome} - ${item.grupo}`"
+											/>
+										</UTooltip>
+									</div>
+								</div>
+							</template>
+						</UAccordion>
 					</div>
-				</div>
+				</ClientOnly>
 			</div>
 		</div>
 		<template #footer>
-			<div class="flex space-x-2 justify-center">
+			<div class="flex justify-center space-x-2">
 				<UButton
 					v-if="level === 'Administrador'"
 					icon="i-heroicons-user-plus"
 					label="Criar"
 					color="green"
-					@click="criar"
 					:loading="loadingCriar"
+					@click="criar"
 				/>
 			</div>
 		</template>
 	</UCard>
 
-	<UModal v-model="modalFoto" :ui="{width: '!w-3/5'}">
+	<UModal v-model="modalFoto" :ui="{ width: '!w-3/5 sm:max-w-full' }">
 		<UCard
 			:ui="{
 				divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-				header: {background: 'bg-cyan-500'}
+				header: { background: 'bg-cyan-500' },
 			}"
 		>
 			<template #header>
-				<h3 class="text-center">Foto de Perfil</h3>
+				<h3 class="text-center">
+					Foto de Perfil
+				</h3>
 			</template>
 			<span>
 				Uma foto institucional ideal deve ser tirada acima dos ombros, sem o uso de acessórios, como
@@ -473,25 +536,25 @@ const criar = () => {
 				profissional e confiável. Evitar acessórios ajuda a manter a clareza e a atenção direcionada
 				ao rosto.
 			</span>
-			<USkeleton class="m-auto h-96 w-96 mt-4" v-if="loadingWebcam" />
-			<div class="m-4 flex justify-center relative" v-show="webcamStream">
-				<video v-show="!fotoTirada" ref="webcamDiv" autoplay="true"></video>
-				<img v-show="fotoTirada" ref="imgFotoTirada" src="" />
+			<USkeleton v-if="loadingWebcam" class="m-auto mt-4 h-96 w-96" />
+			<div v-show="webcamStream" class="relative flex justify-center m-4">
+				<video v-show="!fotoTirada" ref="webcamDiv" autoplay="true" />
+				<img v-show="fotoTirada" ref="imgFotoTirada" src="">
 				<UButton
+					v-if="!fotoTirada"
 					class="absolute bottom-[-15px]"
 					icon="i-heroicons-camera"
 					color="green"
-					:ui="{rounded: 'rounded-full'}"
+					:ui="{ rounded: 'rounded-full' }"
 					@click="recFoto"
-					v-if="!fotoTirada"
 				/>
 				<UButton
+					v-else
 					class="absolute bottom-[-15px]"
 					icon="i-heroicons-arrow-uturn-left"
 					color="red"
-					:ui="{rounded: 'rounded-full'}"
+					:ui="{ rounded: 'rounded-full' }"
 					@click="fotoTirada = false"
-					v-else
 				/>
 			</div>
 
@@ -499,20 +562,20 @@ const criar = () => {
 				<div class="flex justify-center space-x-4">
 					<UButton label="Enviar Arquivo" color="blue" icon="i-heroicons-photo" @click="open" />
 					<UButton
+						v-if="!webcamStream"
 						label="Abrir Câmera"
 						color="green"
 						icon="i-heroicons-camera"
-						v-if="!webcamStream"
 						:disabled="loadingWebcam"
 						@click="iniciarCamera"
 					/>
 					<UButton
+						v-else
 						label="Enviar esta Foto"
 						color="green"
 						icon="i-heroicons-camera"
-						v-else
-						@click="escolherFotoTirada"
 						:disabled="!fotoTirada"
+						@click="escolherFotoTirada"
 					/>
 				</div>
 			</template>

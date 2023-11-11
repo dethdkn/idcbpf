@@ -2,8 +2,8 @@
 const props = defineProps({
 	modelValue: {
 		type: Date,
-		default: null
-	}
+		default: null,
+	},
 })
 
 const emit = defineEmits(['update:model-value', 'close'])
@@ -17,7 +17,7 @@ const date = computed({
 	set: (value) => {
 		emit('update:model-value', value)
 		emit('close')
-	}
+	},
 })
 
 const attrs = [
@@ -26,10 +26,10 @@ const attrs = [
 		highlight: {
 			color: 'blue',
 			fillMode: 'outline',
-			class: '!bg-gray-100 dark:!bg-gray-800'
+			class: '!bg-gray-100 dark:!bg-gray-800',
 		},
-		dates: new Date()
-	}
+		dates: new Date(),
+	},
 ]
 
 const label = computed(() => {
@@ -38,7 +38,7 @@ const label = computed(() => {
 			weekday: 'long',
 			year: 'numeric',
 			month: 'long',
-			day: 'numeric'
+			day: 'numeric',
 		})
 	}
 	return 'Selecione a Data'
@@ -46,9 +46,9 @@ const label = computed(() => {
 </script>
 
 <template>
-	<UPopover :popper="{placement: 'bottom-start'}">
+	<UPopover :popper="{ placement: 'bottom-start' }">
 		<UButton icon="i-heroicons-calendar-days-20-solid" :label="label" class="w-full" />
-		<template #panel="{close}">
+		<template #panel="{ close }">
 			<DatePicker
 				v-model="date"
 				locale="pt-BR"

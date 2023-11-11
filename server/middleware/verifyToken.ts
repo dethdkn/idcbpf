@@ -3,11 +3,11 @@ export default defineEventHandler(async (event) => {
 	const userCookie = getCookie(event, 'user') || ''
 	if (userCookie) {
 		const token = JSON.parse(userCookie).token
-		if (token) decodedToken = await decodeToken(token)
+		if (token)
+			decodedToken = await decodeToken(token)
 	}
-	if (decodedToken) {
+	if (decodedToken)
 		event.context.user = decodedToken
-	} else {
+	else
 		event.context.user = null
-	}
 })

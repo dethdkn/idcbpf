@@ -3,5 +3,5 @@ await navigateTo('/usuarios')
 </script>
 
 <template>
-	<section></section>
+	<section />
 </template>

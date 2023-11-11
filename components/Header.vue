@@ -8,35 +8,36 @@ const isDark = computed({
 	},
 	set() {
 		colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-	}
+	},
 })
 
-const {currentRoute: route} = useRouter()
-const checkRoute = (current: string = '', nav: string[]) => {
+const { currentRoute: route } = useRouter()
+function checkRoute(current: string = '', nav: string[]) {
 	return nav.includes(current)
 		? 'text-white bg-blue-700 lg:bg-transparent lg:text-blue-700 lg:dark:text-blue-500'
 		: 'text-gray-900 hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700'
 }
 
-const {idcbpf, level} = storeToRefs(userStore())
+const { idcbpf, level } = storeToRefs(userStore())
 
 const picture = ref('')
-const baixarFoto = async () => {
-	const {data} = await useFetch('/picture', {
+async function baixarFoto() {
+	const { data } = await useFetch('/picture', {
 		method: 'post',
-		body: {idcbpf: idcbpf.value}
+		body: { idcbpf: idcbpf.value },
 	})
-	if (data.value) return (picture.value = data.value)
+	if (data.value)
+		return (picture.value = data.value)
 	picture.value = ''
 }
-if (userStore().isLoggedIn) {
+if (userStore().isLoggedIn)
 	baixarFoto()
-}
+
 watch(idcbpf, () => {
 	baixarFoto()
 })
 
-const goToProfile = async () => await navigateTo('/usuarios/' + idcbpf.value)
+const goToProfile = async () => await navigateTo(`/usuarios/${idcbpf.value}`)
 
 const userMenu = computed(() => {
 	return [
@@ -44,29 +45,29 @@ const userMenu = computed(() => {
 			{
 				label: idcbpf.value,
 				icon: 'i-heroicons-user-circle',
-				click: goToProfile
+				click: goToProfile,
 			},
 			{
 				label: level.value ? level.value : 'Usuário',
 				icon: 'i-heroicons-ticket',
-				click: goToProfile
-			}
+				click: goToProfile,
+			},
 		],
 		[
 			{
 				label: 'Sair',
 				icon: 'i-heroicons-arrow-right-on-rectangle',
-				click: useLogout
-			}
-		]
+				click: useLogout,
+			},
+		],
 	]
 })
 </script>
 
 <template>
-	<nav class="bg-white border-gray-200 dark:bg-gray-900">
+	<nav class="bg-slate-50 dark:bg-gray-800">
 		<div
-			class="max-w-screen-xl flex flex-wrap items-center justify-center sm:justify-between mx-auto p-4"
+			class="flex flex-wrap items-center justify-center max-w-screen-xl p-4 mx-auto sm:justify-between"
 		>
 			<NuxtLink to="/" class="flex items-center">
 				<ClientOnly>
@@ -75,39 +76,40 @@ const userMenu = computed(() => {
 						src="~/assets/images/cbpf-white.svg"
 						class="h-8 mr-3"
 						alt="Logo do Centro Brasileiro de Pesquisas Físicas"
-					/>
+					>
 					<img
 						v-else
 						src="~/assets/images/cbpf-color.svg"
 						class="h-8 mr-3"
 						alt="Logo do Centro Brasileiro de Pesquisas Físicas"
-					/>
+					>
 					<template #fallback>
-						<USkeleton class="w-8 h-8 mr-3" :ui="{rounded: 'rounded-full'}" />
+						<USkeleton
+							class="w-8 h-8 mr-3"
+							:ui="{ rounded: 'rounded-full', background: 'bg-gray-300 dark:bg-gray-600' }"
+						/>
 					</template>
 				</ClientOnly>
-				<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-					>ID CBPF</span
-				>
+				<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">ID CBPF</span>
 			</NuxtLink>
-			<div class="flex items-center lg:order-2 mt-4 sm:mt-0">
+			<div class="flex items-center mt-4 lg:order-2 sm:mt-0">
 				<UDropdown
-					:items="userMenu"
-					:popper="{placement: 'bottom-start'}"
 					v-if="userStore().isLoggedIn"
+					:items="userMenu"
+					:popper="{ placement: 'bottom-start' }"
 				>
 					<img
 						v-if="picture"
 						class="w-8 h-8 rounded-full"
-						:src="'data:image/jpeg;base64,' + picture"
+						:src="`data:image/jpeg;base64,${picture}`"
 						:alt="idcbpf"
-					/>
+					>
 					<img
 						v-else
 						class="w-8 h-8 rounded-full"
 						src="~/assets/images/nopic.jpg"
 						alt="Usuário sem foto"
-					/>
+					>
 				</UDropdown>
 				<UButton
 					v-else
@@ -123,15 +125,15 @@ const userMenu = computed(() => {
 						:icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
 						color="gray"
 						aria-label="Tema"
-						@click="isDark = !isDark"
 						class="ms-4"
+						@click="isDark = !isDark"
 					/>
 					<template #fallback>
-						<USkeleton class="w-8 h-8 ms-4" />
+						<USkeleton class="w-8 h-8 ms-4" :ui="{ background: 'bg-gray-300 dark:bg-gray-600' }" />
 					</template>
 				</ClientOnly>
 				<button
-					class="inline-flex items-center p-2 ms-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+					class="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-gray-500 rounded-lg ms-2 lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
 					@click="menuClosed = !menuClosed"
 				>
 					<svg
@@ -153,37 +155,40 @@ const userMenu = computed(() => {
 			</div>
 			<div
 				class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
-				:class="{hidden: menuClosed}"
+				:class="{ hidden: menuClosed }"
 			>
 				<ul
-					class="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-white dark:bg-gray-800 lg:dark:bg-gray-900 dark:border-gray-700"
+					class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg lg:p-0 bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-slate-50 dark:bg-gray-800 lg:dark:bg-gray-800 dark:border-gray-700"
 				>
 					<li v-if="['Administrador', 'Auditor'].includes(level)">
 						<NuxtLink
 							to="/usuarios"
-							@click="menuClosed = true"
 							:class="checkRoute(route.fullPath, ['/usuarios'])"
 							class="block py-2 pl-3 pr-4 rounded lg:p-0"
-							>Usuários</NuxtLink
+							@click="menuClosed = true"
 						>
+							Usuários
+						</NuxtLink>
 					</li>
 					<li v-if="['Administrador', 'Auditor'].includes(level)">
 						<NuxtLink
 							to="/grupos"
-							@click="menuClosed = true"
 							:class="checkRoute(route.fullPath, ['/grupos'])"
 							class="block py-2 pl-3 pr-4 rounded lg:p-0"
-							>Grupos</NuxtLink
+							@click="menuClosed = true"
 						>
+							Grupos
+						</NuxtLink>
 					</li>
 					<li v-if="['Administrador', 'Auditor'].includes(level)">
 						<NuxtLink
 							to="/logs"
-							@click="menuClosed = true"
 							:class="checkRoute(route.fullPath, ['/logs'])"
 							class="block py-2 pl-3 pr-4 rounded lg:p-0"
-							>Logs</NuxtLink
+							@click="menuClosed = true"
 						>
+							Logs
+						</NuxtLink>
 					</li>
 				</ul>
 			</div>

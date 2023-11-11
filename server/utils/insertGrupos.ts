@@ -4,20 +4,20 @@ export default (uid: string, grupos: string[]): Promise<void> => {
 			const grupoArr = grupoDashed.split(' - ')
 			const subgrupo = grupoArr[0]
 			const grupo = grupoArr[1]
-			const change = new ldapChange({
+			const change = new LdapChange({
 				operation: 'add',
 				modification: {
 					type: 'member',
-					values: [`uid=${uid}, ${LDAP_PEOPLE_DN}`]
-				}
+					values: [`uid=${uid}, ${LDAP_PEOPLE_DN}`],
+				},
 			})
 			ldapClient.modify(`cn=${subgrupo}, ou=${grupo}, ${LDAP_GROUPS_DN}`, change, (err) => {
 				if (err) {
 					new Erro({
 						erro: {
 							info: 'Erro ao adicinar usuario ao grupo ldap',
-							err
-						}
+							err,
+						},
 					}).save()
 					return reject('Erro ao adicionar usuário ao grupo')
 				}

@@ -10,8 +10,8 @@ const {
 	LDAP_PEOPLE_DN,
 	LDAP_GROUPS_DN,
 	LDAP_COORDINATIONS_DN,
-	CREATE_HOME_SH
-} = useRuntimeConfig().public
+	CREATE_HOME_SH,
+} = useRuntimeConfig()
 
 export {
 	JWT,
@@ -25,5 +25,5 @@ export {
 	LDAP_PEOPLE_DN,
 	LDAP_GROUPS_DN,
 	LDAP_COORDINATIONS_DN,
-	CREATE_HOME_SH
+	CREATE_HOME_SH,
 }

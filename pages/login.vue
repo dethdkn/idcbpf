@@ -1,41 +1,31 @@
 <script setup lang="ts">
 definePageMeta({
-	middleware: 'is-not-authenticated'
+	middleware: 'is-not-authenticated',
 })
 useHead({
-	title: `ID - Login`
+	title: `Login`,
 })
 
 const idcbpf = ref('')
 const passwd = ref('')
 const loading = ref(false)
-const loginExec = async () => {
+async function loginExec() {
 	loading.value = true
-	const {data} = await useFetch('/authenticate', {
+	const data = await $fetch('/authenticate', {
 		method: 'post',
-		body: {idcbpf: idcbpf.value.replace('@cbpf.br', '').toLowerCase(), passwd: passwd.value},
-		onRequestError() {
-			useToast().add({
-				title: 'Ocorreu um erro desconhecido',
-				icon: 'i-heroicons-exclamation-triangle',
-				color: 'red'
-			})
-			loading.value = false
-		},
-		onResponseError({response}) {
-			useToast().add({
-				title: response._data.message,
-				icon: 'i-heroicons-exclamation-triangle',
-				color: 'red'
-			})
-			loading.value = false
-		}
+		body: { idcbpf: idcbpf.value.replace('@cbpf.br', '').toLowerCase(), passwd: passwd.value },
+	}).catch((err) => {
+		useToast().add({
+			title: err.data.message,
+			icon: 'i-heroicons-exclamation-triangle',
+			color: 'red',
+		})
 	})
-	if (data.value) {
-		const res = data.value
-		userStore().setUserState(res.token, res.isLoggedIn, res.idcbpf, res.level)
+	if (data) {
+		userStore().setUserState(data.token, data.isLoggedIn, data.idcbpf, data.level)
 		navigateTo('/')
 	}
+	loading.value = false
 }
 </script>
 
@@ -57,15 +47,14 @@ const loginExec = async () => {
 						<div>
 							<label
 								for="idcbpf"
-								class="block ms-2 mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>ID CBPF</label
-							>
+								class="block mb-2 text-sm font-medium text-gray-900 ms-2 dark:text-white"
+							>ID CBPF</label>
 							<UInput
-								icon="i-heroicons-envelope"
 								id="idcbpf"
+								v-model="idcbpf"
+								icon="i-heroicons-envelope"
 								size="lg"
 								color="white"
-								v-model="idcbpf"
 								@keydown.space.prevent
 								@keydown.enter="loginExec"
 							/>
@@ -73,16 +62,15 @@ const loginExec = async () => {
 						<div>
 							<label
 								for="senha"
-								class="block ms-2 mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>Senha</label
-							>
+								class="block mb-2 text-sm font-medium text-gray-900 ms-2 dark:text-white"
+							>Senha</label>
 							<UInput
-								icon="i-heroicons-key"
 								id="senha"
+								v-model="passwd"
+								icon="i-heroicons-key"
 								size="lg"
 								color="white"
 								type="password"
-								v-model="passwd"
 								@keydown.enter="loginExec"
 							/>
 						</div>

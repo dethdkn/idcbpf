@@ -6,12 +6,13 @@ export default (foto: string): Promise<string> => {
 			const canvas = document.createElement('canvas')
 			const ctx = canvas.getContext('2d')
 			if (ctx) {
-				const {width, height} = image
+				const { width, height } = image
 				let sx, sy
 				if (width > height) {
 					sx = Math.round((width - height) / 2)
 					sy = 0
-				} else {
+				}
+				else {
 					sx = 0
 					sy = Math.round((height - width) / 2)
 				}
@@ -27,10 +28,11 @@ export default (foto: string): Promise<string> => {
 					0,
 					0,
 					128,
-					128
+					128,
 				)
 				return resolve(canvas.toDataURL('image/jpeg').replace('data:image/jpeg;base64,', ''))
-			} else {
+			}
+			else {
 				return resolve('')
 			}
 		}

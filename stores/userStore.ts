@@ -10,7 +10,7 @@ export default defineStore(
 			tokenV: string,
 			isLoggedInV: boolean,
 			idcbpfV: string,
-			levelV: string
+			levelV: string,
 		) => {
 			token.value = tokenV
 			isLoggedIn.value = isLoggedInV
@@ -25,7 +25,7 @@ export default defineStore(
 			level.value = ''
 		}
 
-		return {token, isLoggedIn, idcbpf, level, setUserState, clearUserState}
+		return { token, isLoggedIn, idcbpf, level, setUserState, clearUserState }
 	},
-	{persist: true}
+	{ persist: true },
 )

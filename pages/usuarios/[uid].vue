@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const {uid} = useRoute().params
+const { uid } = useRoute().params
 const idcbpf = ref(typeof uid === 'string' ? uid : uid[0])
 definePageMeta({
-	middleware: 'is-authenticated'
+	middleware: 'is-authenticated',
 })
 useHead({
-	title: `ID - ${uid}`
+	title: `${uid}`,
 })
 </script>
 

@@ -5,8 +5,8 @@ export default (uid: string): Promise<void> => {
 				new Erro({
 					erro: {
 						info: 'Erro ao deletar usuário do ldap',
-						err
-					}
+						err,
+					},
 				}).save()
 				return reject('Erro ao deletar usuário')
 			}

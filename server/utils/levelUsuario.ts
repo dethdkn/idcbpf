@@ -10,9 +10,18 @@ export default (idcbpf: string): Promise<'Administrador' | 'Moderador' | 'Audito
 		const adms = await membrosGrupos('administrador', 'contas').catch((err) => {
 			return reject(err)
 		})
-		if (auds) if (auds.includes(idcbpf)) level = 'Auditor'
-		if (mods) if (mods.includes(idcbpf)) level = 'Moderador'
-		if (adms) if (adms.includes(idcbpf)) level = 'Administrador'
+		if (auds) {
+			if (auds.includes(idcbpf))
+				level = 'Auditor'
+		}
+		if (mods) {
+			if (mods.includes(idcbpf))
+				level = 'Moderador'
+		}
+		if (adms) {
+			if (adms.includes(idcbpf))
+				level = 'Administrador'
+		}
 		return resolve(level)
 	})
 }

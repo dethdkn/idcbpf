@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-	const {user} = event.context
+	const { user } = event.context
 	const {
 		foto,
 		uid,
@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
 		validade,
 		descricao,
 		coordenacoes,
-		grupos
-	} = JSON.parse(await readBody(event)) as {
+		grupos,
+	} = await readBody(event) as {
 		foto: string
 		uid: string
 		nome: string
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
 	try {
 		if (user && ['Administrador'].includes(user.level)) {
 			if (await validIDCBPF(uid))
-				throw {statusCode: 403, statusMessage: 'Proibido', message: 'Usuário já existe'}
+				throw { statusCode: 403, statusMessage: 'Proibido', message: 'Usuário já existe' }
 			await insertUser(
 				user.idcbpf,
 				foto,
@@ -42,36 +42,39 @@ export default defineEventHandler(async (event) => {
 				senha,
 				ramal,
 				validade,
-				descricao
+				descricao,
 			)
 			await insertCoordenacoes(uid, coordenacoes)
 			await insertGrupos(uid, grupos)
 			await runCreateHome(uid)
 			new Log({
 				usuario: user.idcbpf,
-				acao: `Criou o usuário '${uid}'`
+				acao: `Criou o usuário '${uid}'`,
 			}).save()
-			return ''
+			return 'Ok'
 		}
-		throw {statusCode: 403, statusMessage: 'Proibido', message: 'Nao autorizado'}
-	} catch (e) {
+		throw { statusCode: 403, statusMessage: 'Proibido', message: 'Nao autorizado' }
+	}
+	catch (e) {
 		if (e && typeof e === 'string')
-			throw createError({statusCode: 500, message: e, statusMessage: 'Erro no servidor'})
-		if (e && typeof e === 'object' && 'statusCode' in e && 'message' in e && 'statusMessage' in e)
+			throw createError({ statusCode: 500, message: e, statusMessage: 'Erro no servidor' })
+		if (e && typeof e === 'object' && 'statusCode' in e && 'message' in e && 'statusMessage' in e) {
 			if (
-				typeof e.statusCode === 'number' &&
-				typeof e.message === 'string' &&
-				typeof e.statusMessage === 'string'
-			)
+				typeof e.statusCode === 'number'
+				&& typeof e.message === 'string'
+				&& typeof e.statusMessage === 'string'
+			) {
 				throw createError({
 					statusCode: e.statusCode,
 					message: e.message,
-					statusMessage: e.statusMessage
+					statusMessage: e.statusMessage,
 				})
+			}
+		}
 		throw createError({
 			statusCode: 500,
 			message: 'Ocorreu um erro desconhecido',
-			statusMessage: 'Erro no servidor'
+			statusMessage: 'Erro no servidor',
 		})
 	}
 })

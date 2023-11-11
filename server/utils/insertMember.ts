@@ -1,11 +1,11 @@
 export default (responsavel: string, cn: string, ou: string, uid: string): Promise<void> => {
 	return new Promise(async (resolve, reject) => {
-		const change = new ldapChange({
+		const change = new LdapChange({
 			operation: 'add',
 			modification: {
 				type: 'member',
-				values: [`uid=${uid}, ${LDAP_PEOPLE_DN}`]
-			}
+				values: [`uid=${uid}, ${LDAP_PEOPLE_DN}`],
+			},
 		})
 		ldapClient.modify(`cn=${cn}, ou=${ou}, ${LDAP_GROUPS_DN}`, change, (err) => {
 			if (err) {
@@ -14,14 +14,14 @@ export default (responsavel: string, cn: string, ou: string, uid: string): Promi
 						info: 'Erro ao adicinar usuario ao grupo ldap',
 						err,
 						cn,
-						ou
-					}
+						ou,
+					},
 				}).save()
 				return reject('Erro ao adicionar usuário ao grupo')
 			}
 			new Log({
 				usuario: responsavel,
-				acao: `Adicionou o usuário '${uid}' ao subgrupo '${cn}' do grupo '${ou}'`
+				acao: `Adicionou o usuário '${uid}' ao subgrupo '${cn}' do grupo '${ou}'`,
 			}).save()
 			return resolve()
 		})

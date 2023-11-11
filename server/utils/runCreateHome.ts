@@ -7,8 +7,8 @@ export default (uid: string): Promise<void> => {
 						info: 'Erro ao criar home do usuario',
 						error,
 						stdout,
-						stderr
-					}
+						stderr,
+					},
 				}).save()
 				return reject('Erro ao criar home do usuário')
 			}

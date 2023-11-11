@@ -1,18 +1,15 @@
 <template>
 	<footer class="bg-white dark:bg-gray-900">
-		<div class="mx-auto w-full">
+		<div class="w-full mx-auto">
 			<div
-				class="px-4 py-6 bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between text-center"
+				class="px-4 py-6 text-center bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between"
 			>
-				<span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center"
-					>© {{ new Date().getFullYear() }}
-					<NuxtLink to="https://cbpf.br" external target="_blank"
-						>Centro Brasileiro de Pesquisas Físicas - Coordenação de Desenvolvimento Tecnológico -
-						WEB</NuxtLink
-					>
+				<span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">© {{ new Date().getFullYear() }}
+					<NuxtLink to="https://cbpf.br" external target="_blank">Centro Brasileiro de Pesquisas Físicas - Coordenação de Desenvolvimento Tecnológico -
+						WEB</NuxtLink>
 				</span>
-				<div class="flex mt-4 space-x-5 justify-center md:mt-0">
-					<UTooltip text="Instagram" :popper="{placement: 'top'}">
+				<div class="flex justify-center mt-4 space-x-5 md:mt-0">
+					<UTooltip text="Instagram" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://www.instagram.com/cbpfoficial"
 							external
@@ -32,7 +29,7 @@
 							</svg>
 						</NuxtLink>
 					</UTooltip>
-					<UTooltip text="Facebook" :popper="{placement: 'top'}">
+					<UTooltip text="Facebook" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://www.facebook.com/cbpf.mctic"
 							external
@@ -52,7 +49,7 @@
 							</svg>
 						</NuxtLink>
 					</UTooltip>
-					<UTooltip text="Youtube" :popper="{placement: 'top'}">
+					<UTooltip text="Youtube" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://www.youtube.com/user/CBPFvideos"
 							external
@@ -72,7 +69,7 @@
 							</svg>
 						</NuxtLink>
 					</UTooltip>
-					<UTooltip text="Linkedin" :popper="{placement: 'top'}">
+					<UTooltip text="Linkedin" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://www.linkedin.com/company/cbpf-mcti"
 							external
@@ -92,7 +89,7 @@
 							</svg>
 						</NuxtLink>
 					</UTooltip>
-					<UTooltip text="Flickr" :popper="{placement: 'top'}">
+					<UTooltip text="Flickr" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://www.flickr.com/photos/cbpf_mctic/albums"
 							external
@@ -112,7 +109,7 @@
 							</svg>
 						</NuxtLink>
 					</UTooltip>
-					<UTooltip text="X" :popper="{placement: 'top'}">
+					<UTooltip text="X" :popper="{ placement: 'top' }">
 						<NuxtLink
 							to="https://x.com/cbpf_mcti"
 							external

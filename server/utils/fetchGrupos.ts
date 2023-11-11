@@ -6,15 +6,15 @@ export default (): Promise<Grupos[]> => {
 			{
 				filter: '(cn=*)',
 				scope: 'sub',
-				attributes: ['description']
+				attributes: ['description'],
 			},
 			(err, res) => {
 				if (err) {
 					new Erro({
 						erro: {
 							info: 'erro ao buscar grupos ldap',
-							err
-						}
+							err,
+						},
 					}).save()
 					return reject('Erro ao baixar grupos')
 				}
@@ -26,15 +26,15 @@ export default (): Promise<Grupos[]> => {
 					grups.push({
 						subgrupo,
 						grupo,
-						description: entry.pojo.attributes[0].values[0]
+						description: entry.pojo.attributes[0].values[0],
 					})
 				})
 				res.on('error', (error) => {
 					new Erro({
 						erro: {
 							info: 'erro ao buscar grupos ldap',
-							error
-						}
+							error,
+						},
 					}).save()
 					return reject('Erro ao baixar grupos')
 				})
@@ -42,7 +42,7 @@ export default (): Promise<Grupos[]> => {
 					grups.sort((a, b) => a.grupo.localeCompare(b.grupo))
 					return resolve(grups)
 				})
-			}
+			},
 		)
 	})
 }

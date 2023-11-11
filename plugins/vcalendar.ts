@@ -1,6 +1,6 @@
-import {setupCalendar, Calendar, DatePicker} from 'v-calendar'
+import { Calendar, DatePicker, setupCalendar } from 'v-calendar'
 
-export default defineNuxtPlugin(({vueApp}) => {
+export default defineNuxtPlugin(({ vueApp }) => {
 	vueApp.use(setupCalendar, {
 		locales: {
 			'pt-BR': {
@@ -8,7 +8,7 @@ export default defineNuxtPlugin(({vueApp}) => {
 				masks: {
 					L: 'DD-MM-YYYY',
 					weekdays: 'WWW',
-					navMonths: 'MMM'
+					navMonths: 'MMM',
 				},
 				dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
 				dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
@@ -26,7 +26,7 @@ export default defineNuxtPlugin(({vueApp}) => {
 					'Setembro',
 					'Outubro',
 					'Novembro',
-					'Dezembro'
+					'Dezembro',
 				],
 				monthNamesShort: [
 					'Jan',
@@ -40,10 +40,10 @@ export default defineNuxtPlugin(({vueApp}) => {
 					'Set',
 					'Out',
 					'Nov',
-					'Dez'
-				]
-			}
-		}
+					'Dez',
+				],
+			},
+		},
 	})
 	vueApp.component('DatePicker', DatePicker)
 	vueApp.component('Calendar', Calendar)

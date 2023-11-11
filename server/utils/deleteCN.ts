@@ -5,14 +5,14 @@ export default (responsavel: string, cn: string, ou: string): Promise<void> => {
 				new Erro({
 					erro: {
 						info: 'Erro ao deletar subgrupo do ldap',
-						err
-					}
+						err,
+					},
 				}).save()
 				return reject('Erro ao deletar subgrupo')
 			}
 			new Log({
 				usuario: responsavel,
-				acao: `Excluiu o subgrupo '${cn}' do grupo topo '${ou}'`
+				acao: `Excluiu o subgrupo '${cn}' do grupo topo '${ou}'`,
 			}).save()
 			return resolve()
 		})

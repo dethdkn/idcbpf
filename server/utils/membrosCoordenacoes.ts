@@ -3,15 +3,15 @@ export default (cn: string): Promise<string[]> => {
 		let members: string[] = []
 		ldapClient.search(
 			`cn=${cn}, ${LDAP_COORDINATIONS_DN}`,
-			{attributes: ['member']},
+			{ attributes: ['member'] },
 			(err, res) => {
 				if (err) {
 					new Erro({
 						erro: {
 							info: 'Erro na busca de membros de uma coordenacao ldap',
 							cn,
-							err
-						}
+							err,
+						},
 					}).save()
 					return reject('Erro ao baixar membros das coordenações')
 				}
@@ -23,15 +23,15 @@ export default (cn: string): Promise<string[]> => {
 						erro: {
 							info: 'Erro na busca de membros de uma coordenacao ldap',
 							cn,
-							error
-						}
+							error,
+						},
 					}).save()
 					return reject('Erro ao baixar membros das coordenações')
 				})
 				res.on('end', () => {
 					return resolve(limparMembros(members))
 				})
-			}
+			},
 		)
 	})
 }
